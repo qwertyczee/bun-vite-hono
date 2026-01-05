@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "bun --hot src/index.ts",
-    "build": "bun build ./src/index.html --outdir=dist --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
-    "start": "NODE_ENV=production bun src/index.ts"
+    "build:client": "bun build ./src/client/index.html --outdir=dist/public --sourcemap --target=browser --minify --define:process.env.NODE_ENV='\"production\"' --env='BUN_PUBLIC_*'",
+    "build:server": "bun build ./src/index.ts --outfile=dist/index.js --target=bun --define:process.env.NODE_ENV='\"production\"'",
+    "build": "bun run build:client && bun run build:server",
+    "start": "bun dist/index.js"
   },
   "dependencies": {
     "hono": "^4.11.3",

@@ -1,12 +1,21 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import users from "./routes/users";
 
 const app = new Hono();
 
-app.route("/api/users", users);
+app.use(
+    "*",
+    cors({
+        origin: (origin) => origin,
+        credentials: true,
+    })
+);
+
+app.route("/users", users);
 
 // GET /api/hello
-app.get("/api/hello", (c) => {
+app.get("/hello", (c) => {
   return c.json({
     message: "Hello, world!",
     method: "GET",
@@ -14,7 +23,7 @@ app.get("/api/hello", (c) => {
 });
 
 // PUT /api/hello
-app.put("/api/hello", (c) => {
+app.put("/hello", (c) => {
   return c.json({
     message: "Hello, world!",
     method: "PUT",
@@ -22,7 +31,7 @@ app.put("/api/hello", (c) => {
 });
 
 // GET /api/hello/:name
-app.get("/api/hello/:name", (c) => {
+app.get("/hello/:name", (c) => {
   const name = c.req.param("name");
   return c.json({
     message: `Hello, ${name}!`,
