@@ -10,7 +10,7 @@ const app = new Hono();
 app.route("/api", api);
 
 // 2. Serve Frontend
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV !== "production") {
   console.log("🚀 Running in Development Mode");
   
   // DEV: Serve the raw source HTML. 
@@ -27,7 +27,4 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", serveStatic({ path: "./dist/public/index.html" }));
 }
 
-export default {
-  port: process.env.PORT || 3000,
-  fetch: app.fetch,
-};
+export default app;
