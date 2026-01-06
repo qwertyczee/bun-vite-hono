@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=development bun --hot src/dev.ts",
-    "build:client": "bun build ./src/client/index.html --outdir=dist/public --sourcemap --target=browser --minify --env='BUN_PUBLIC_*'",
-    "build:server": "bun build src/prod.ts --outfile api/index.js --minify --sourcemap=none --target browser --format esm",
+    "build:client": "bun build ./src/client/index.html --outdir=dist/public --target=browser --minify --splitting --env='BUN_PUBLIC_*'",
+    "build:server": "bun build src/prod.ts --outfile=api/index.js --target=bun --minify --packages=external --define DEBUG='false'",
     "build": "bun run build:client && bun run build:server",
     "start": "NODE_ENV=production bun api/index.js"
   },
