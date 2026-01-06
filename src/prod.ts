@@ -1,6 +1,5 @@
 // Prod
 import { serveStatic } from "hono/bun";
-import { handle } from 'hono/vercel'
 import { join } from "path";
 import { existsSync } from "node:fs";
 import app from "./app";
@@ -18,8 +17,4 @@ app.get('*', (c) => {
     return new Response(Bun.file(indexPath));
 });
 
-export const config = {
-  runtime: 'edge',
-}
-
-export default handle(app);
+export default app;
