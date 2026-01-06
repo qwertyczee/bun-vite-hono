@@ -4,11 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun --hot src/index.ts",
+    "dev": "NODE_ENV=development bun --hot src/dev.ts",
     "build:client": "bun build ./src/client/index.html --outdir=dist/public --sourcemap --target=browser --minify --env='BUN_PUBLIC_*'",
-    "build:server": "bun build src/index.ts --outfile api/index.js --minify --sourcemap=none --target bun",
+    "build:server": "bun build src/prod.ts --outfile api/index.js --minify --sourcemap=none --target bun",
     "build": "bun run build:client && bun run build:server",
-    "start": "bun api/index.js"
+    "start": "NODE_ENV=production bun api/index.js"
   },
   "dependencies": {
     "hono": "^4.11.3",
