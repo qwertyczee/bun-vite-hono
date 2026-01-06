@@ -7,9 +7,7 @@
     "dev": "bun --hot src/index.ts",
     "build:client": "bun build ./src/client/index.html --outdir=dist/public --sourcemap --target=browser --minify --env='BUN_PUBLIC_*'",
     "build:server": "bun build src/index.ts --outfile api/index.js --minify --sourcemap=none --target bun",
-    "build:server:local": "bun build src/index.ts --outfile api/index.js --minify --sourcemap=none --target bun",
     "build": "bun run build:client && bun run build:server",
-    "build:local": "bun run build:client && bun run build:server:local",
     "start": "bun api/index.js"
   },
   "dependencies": {
