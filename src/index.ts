@@ -1,30 +1,55 @@
+// Prod
 import { Hono } from "hono";
-import { serveStatic } from 'hono/bun'
-import api from "./api";
-
-console.log(process.env.NODE_ENV)
+import { serveStatic } from "hono/bun";
+import api from "./api/index";
+import { existsSync } from "fs";
+import { join } from "path";
 
 const app = new Hono();
 
-// 1. Mount API
 app.route("/api", api);
 
-// 2. Serve Frontend
-if (process.env.NODE_ENV !== "production") {
-  console.log("🚀 Running in Development Mode");
-  
-  // DEV: Serve the raw source HTML. 
-  // Bun automatically injects the HMR client into this stream.
-  app.get("*", serveStatic({ path: "./client/index.html" }));
+app.use('/*', serveStatic({ 
+    root: 'dist/public',
+    onNotFound: () => {}
+}));
 
-} else {
-  console.log("📦 Running in Production Mode");
+app.get('*', async (c) => {
+    const indexPath = join(process.cwd(), 'dist', 'public', 'index.html');
+    if (!existsSync(indexPath)) {
+        return c.text("Build not found. Run 'bun run build' first.", 404);
+    }
 
-  // PROD: Serve built static assets (JS, CSS, SVG)
-  app.use("/*", serveStatic({ root: "./dist/public" }));
-  
-  // Fallback for SPA Routing (Serve index.html)
-  app.get("*", serveStatic({ path: "./dist/public/index.html" }));
-}
+    return new Response(Bun.file(indexPath));
+});
 
 export default app;
+
+
+
+
+
+
+
+
+
+// Dev
+
+/* import { serve } from "bun";
+import index from "./client/index.html";
+import api from "./api";
+
+console.log("🚀 Running in Development Mode");
+const server = serve({
+  routes: {
+    "/api/*": api.fetch,
+    "/*": index,
+  },
+  
+  development: process.env.NODE_ENV !== "production" && {
+    hmr: true,
+  },
+});
+
+console.log(`Server running at ${server.url}`);  */
+
